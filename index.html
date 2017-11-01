@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="db">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Drawing Board</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/bcbb3a7e4c.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bttn.css/0.2.4/bttn.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bttn.css/0.2.4/standalone/slant.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="src/drawingboard.css">
+
+  </head>
+  <body ng-controller="DBCtrl as dbc" onbeforeunload="ConfirmClose()">
+
+    <div class="modal" id="texts-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Texts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div class="container">
+              <div class="row">
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="text" class="text-muted small">Text</label>
+                    <textarea type="text" class="form-control" rows="3" id="text" placeholder="Text" ng-model="dbc.text"></textarea>
+                  </div>      
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-style" class="text-muted small">Font style</label>
+                    <select ng-model="dbc.fontFamily" id="font-style" class="form-control" ng-options="fontFamily for fontFamily in dbc.fontFamilyList"></select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-text-align" class="text-muted small">Font text align</label>
+                    <select ng-model="dbc.textAlign" id="font-text-align" class="form-control" ng-options="textAlign for textAlign in dbc.textAlignList"></select>
+                  </div>
+                </div>  
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-size" class="text-muted small">Font size</label>
+                    <input type="number" min="1" class="form-control" id="font-size" ng-model="dbc.fontSize">
+                  </div>
+                </div> 
+                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="text-line-height" class="text-muted small">Text line height</label>
+                    <input type="number" min="1" class="form-control" id="text-line-height" ng-model="dbc.lineHeight">
+                  </div>
+                </div>                
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-color" class="text-muted small">Font color</label>
+                    <input type="text" class="form-control" id="font-color" ng-model="dbc.fontColor">
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-strock-color" class="text-muted small">Font stroke color</label>
+                    <input type="text" class="form-control" id="font-strock-color" ng-model="dbc.fontStrokeColor">
+                  </div>
+                </div>    
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="text-background-color" class="text-muted small">Text background color</label>
+                    <input type="text" class="form-control" id="text-background-color" ng-model="dbc.textBackgroundColor">
+                  </div>
+                </div>    
+                                  
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="font-stroke-width" class="text-muted small">Font stroke width</label>
+                    <input type="number" min="0" class="form-control" id="font-stroke-width" ng-model="dbc.fontStrokeWidth">
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" ng-model="dbc.fontBold">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Bold</span>
+                  </label>
+                  
+                  <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" ng-model="dbc.italic">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Italic</span>
+                  </label>                  
+
+                  <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" ng-model="dbc.underline">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Underline</span>
+                  </label>
+
+                  <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" ng-model="dbc.lineThrough">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Line through</span>
+                  </label>
+
+                  <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" ng-model="dbc.overline">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Overline</span>
+                  </label>
+                    
+                </div>                
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="dbc.addText()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="canvas-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Canvas Settings</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label class="custom-control custom-checkbox" ng-init="dbc.canvasBGCheck">
+              <input type="checkbox" class="custom-control-input" ng-model="dbc.canvasBGCheck" ng-change="dbc.makeTransparent()">
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">Transparent canvas</span>
+            </label>            
+
+            <div class="container">
+              <div class="row" ng-show="!dbc.canvasBGCheck">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="canvas-bg-color" class="text-muted small">Canvas background color</label>
+                    <input type="text" class="form-control" id="canvas-bg-color" ng-model="dbc.canvasBGColor">
+                  </div>                  
+                </div>                
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="shapes-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Select shape</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="list-group">
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawCircle();">Circle</a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawEllipse();">Ellipse</a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawLine();">Line</a>
+<!--               <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawPolygon();">Polygon</a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawPolyline();">Polyline</a> -->
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawRectangle();">Rectangle</a>
+              <a href="javascript:void(0)" class="list-group-item list-group-item-action" ng-class="num" ng-click="dbc.drawTriangle();">Triangle</a>
+            </div>
+            
+            <hr>
+
+            <h5 class="text-muted">Advanced settings</h5>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="bg-color" class="text-muted small">Background color</label>
+                    <input type="text" class="form-control" id="bg-color" placeholder="Red, White, Green, #F8F8F8, etc..." ng-model="dbc.bgColor">
+                  </div>                  
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="border-color" class="text-muted small">Border color</label>
+                    <input type="text" class="form-control" id="border-color" placeholder="Red, White, Green, #F8F8F8, etc..." ng-model="dbc.borderColor">
+                  </div>                  
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="border-width" class="text-muted small">Border width</label>
+                    <input type="text" class="form-control" id="border-width" placeholder="1, 2, 3..." ng-model="dbc.borderWidth">
+                  </div>                  
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="opacity" class="text-muted small">Opacity</label>
+                    <select ng-model="dbc.opacity" id="opacity" class="form-control" ng-options="opa.value for opa in dbc.opacitys">
+                    </select>
+                  </div>                  
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+          </div>          
+        </div>
+      </div>
+    </div>
+
+    <div id="drawingboard-container">
+      <h2 class="text-muted">Drawing Board</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-left">
+            <button href="javascript:void(0)" ng-click="dbc.openModal('shapes-modal')" class="bttn-slant bttn-sm bttn-primary">Shapes</button>
+            <button href="javascript:void(0)" ng-click="dbc.openModal('texts-modal')" class="bttn-slant bttn-sm bttn-primary">Texts</button>
+            <button href="javascript:void(0)" ng-click="dbc.openModal('images-modal')" class="bttn-slant bttn-sm bttn-primary">Images</button>
+            <button href="javascript:void(0)" ng-click="dbc.openModal('canvas-modal')" class="bttn-slant bttn-sm bttn-primary">Canvas</button>
+          </div>
+        </div>
+      </div>
+      <canvas id="drawingboard-canvas"></canvas>
+      <div class="text-left">
+        <label class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" ng-model="dbc.selectionCheck" ng-change="dbc.selection(dbc.selectionCheck)">
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description text-muted">Multi object selection</span>
+        </label>
+        <a href="#" id="download" class="badge badge-light"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+      </div>
+
+      <div class="text-muted small">Made with <i class="fa fa-heart text-danger" aria-hidden="true"></i> in LA</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.19/fabric.min.js"></script>
+
+
+    <script src="src/drawingboard.js"></script>
+
+    <script>
+      function ConfirmClose() {
+        debugger;
+      }      
+    </script>
+
+  </body>
+</html>

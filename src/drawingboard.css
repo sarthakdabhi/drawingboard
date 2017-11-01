@@ -1,0 +1,44 @@
+body {
+	background-color: #f8f9fa;
+	font-family: 'Noto Sans', sans-serif;
+}
+
+#drawingboard-container {
+	text-align: center;
+	display: block;
+	margin: 0px auto;
+	width: 768px;	
+}
+
+#drawingboard-canvas {
+	background-color: #FFFFFF;
+}
+
+.canvas-container {
+	display: block;
+	margin: 0px auto;
+	margin-bottom: 15px;
+}
+
+.margin-b-15 {
+	margin-bottom: 15px;
+}
+
+.bttn-primary {
+	outline: none !important;
+}
+
+.sp-replacer {
+	display: block;
+	width: 100%;
+	border: 1px solid rgba(0,0,0,.15) !important;
+}
+
+.sp-preview {
+	width: 90%;
+	border: 1px solid rgba(0,0,0,.15) !important;
+}
+
+.close, .btn {
+	cursor: pointer;
+}
